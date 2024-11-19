@@ -63,7 +63,6 @@ int CreateMyStruct(lua_State* L)
 
 int __GC(lua_State* L)
 {
-    MessageBoxW(NULL, L"Original Message", L"Original Caption", MB_OK);
     // Retrieve the userdata (MyStruct) from Lua.
     // This ensures the object is of the correct type and has the expected metatable.
     MyStruct* myStruct = lua_checkobject<MyStruct*>(L, 1, "MyStructMeta");
