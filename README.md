@@ -105,12 +105,6 @@ print("Updated Value:", obj:GetValue()) -- Outputs: Updated Value: 100
 
 ---
 
-## **Notes**
-- This example does not include a `__gc` metamethod as `MyStruct` does not manage dynamically allocated memory or external resources.
-- Ensure the module is compiled and loaded correctly in your WoW 3.3.5a environment.
-
----
-
 ## **Contributing**
 Feel free to fork the repository and submit pull requests for improvements or new features.
 
@@ -123,3 +117,6 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## **Acknowledgments**
 Special thanks to the World of Warcraft modding community and Lua enthusiasts for providing inspiration and support for this project.
+
+![image](https://github.com/user-attachments/assets/1c13cf2c-fa45-4088-91c2-4d2c8a23cf37)
+
