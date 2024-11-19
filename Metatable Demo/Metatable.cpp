@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include "Metatable.h"
+#include <WinUser.h>
 
 // Example struct to be used as userdata
 // This structure represents a userdata object in Lua, allowing Lua scripts to manipulate it.
@@ -46,7 +47,7 @@ const luaL_Reg MyStructMethods[] = {
 int CreateMyStruct(lua_State* L)
 {
     // Allocates memory for a new userdata object of type MyStruct.
-    MyStruct* myStruct = (MyStruct*)lua_newuserdata(L, sizeof(MyStruct));
+    MyStruct* myStruct = new MyStruct();
 
     // Initializes the 'value' field with the first argument passed from Lua.
     myStruct->value = static_cast<int>(lua_tonumber(L, 1));
@@ -60,13 +61,28 @@ int CreateMyStruct(lua_State* L)
     return 1; // Return the userdata to Lua as a result.
 }
 
+int __GC(lua_State* L)
+{
+    MessageBoxW(NULL, L"Original Message", L"Original Caption", MB_OK);
+    // Retrieve the userdata (MyStruct) from Lua.
+    // This ensures the object is of the correct type and has the expected metatable.
+    MyStruct* myStruct = lua_checkobject<MyStruct*>(L, 1, "MyStructMeta");
+
+    // Free the memory associated with the userdata.
+    // Here, `delete[]` is used assuming MyStruct was allocated as an array.
+    delete[] myStruct;
+
+    // Return 1 to indicate successful cleanup (Lua ignores this value for __gc).
+    return 1;
+}
+
+
 // MetaDemo function to define and register everything
 // This function sets up the "MyStructMeta" metatable and registers CreateMyStruct as a global function.
 int Meta::MetaDemo(lua_State* L) {
 
     // Creates a new metatable for MyStruct if it doesn't already exist.
-    if (lua_newmetatable(L, "MyStructMeta"))
-    {
+    if (lua_newmetatable(L, "MyStructMeta")) {
         // Registers methods (GetValue, SetValue) into the metatable.
         lua_pushmethods(L, MyStructMethods);
 
@@ -74,6 +90,10 @@ int Meta::MetaDemo(lua_State* L) {
         // This enables Lua to find methods for objects with this metatable.
         lua_pushvalue(L, -1);         // Duplicate the metatable on the stack.
         lua_setfield(L, -2, "__index"); // Assign __index to the metatable.
+
+        // Set the __gc metamethod
+        lua_pushcfunction(L, __GC);    // Push the __gc function onto the stack.
+        lua_setfield(L, -2, "__gc");   // Assign the __gc field in the metatable.
 
         lua_pop(L, 1); // Clean up the stack by removing the metatable.
     }
@@ -84,3 +104,4 @@ int Meta::MetaDemo(lua_State* L) {
 
     return 1; // Indicate successful registration.
 }
+
