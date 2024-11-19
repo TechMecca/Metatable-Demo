@@ -94,9 +94,6 @@ The code is designed to interact seamlessly with Lua scripts, making it suitable
 ## **Example Lua Script**
 
 ```lua
--- Load the library
-require("metatable_demo")
-
 -- Create an instance of MyStruct
 local obj = CreateMyStruct(42)
 
