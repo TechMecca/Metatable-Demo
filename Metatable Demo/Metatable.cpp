@@ -69,7 +69,7 @@ int __GC(lua_State* L)
 
     // Free the memory associated with the userdata.
     // Here, `delete[]` is used assuming MyStruct was allocated as an array.
-    delete[] myStruct;
+    delete myStruct;
 
     // Return 1 to indicate successful cleanup (Lua ignores this value for __gc).
     return 1;
