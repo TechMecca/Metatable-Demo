@@ -68,7 +68,7 @@ int __GC(lua_State* L)
     MyStruct* myStruct = lua_checkobject<MyStruct*>(L, 1, "MyStructMeta");
 
     // Free the memory associated with the userdata.
-    // Here, `delete[]` is used assuming MyStruct was allocated as an array.
+    // Here, `delete` is used assuming MyStruct was allocated.
     delete myStruct;
 
     // Return 1 to indicate successful cleanup (Lua ignores this value for __gc).
